@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+
+	<meta charset="utf-8">
+	<title>Calculadora</title>
+
+	<style type="text/css">
+		
+		*{
+			margin:0px;
+			padding: 0px;
+			box-sizing: border-box;
+			font-family: 'Calibri', sans-serif;
+		}
+
+		body{
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+			height: 100vh;
+		}
+
+		input, select, button{
+			width: 200px;
+			display: block;
+			padding: 8px 5px;
+			margin: 15px 0px;
+		}
+
+		label{
+			display: block;
+		}
+
+		article{
+			width: 50%;
+		}
+
+	</style>
+</head>
+<body>
+
+	<article>
+		
+		<h2>Calculadora</h2>
+
+		<form>
+			
+
+			<label>Selecione o tipo de conversão: </label>
+
+			<label>De: </label>
+			<select id="de">
+				<option value="" selected disabled>Tipo de número</option>
+				<option value="1">Binário</option>
+				<option value="2">Decimal</option>
+				<option value="3">Octal</option>
+				<option value="4">Hexadecimal</option>
+			</select>
+
+			<label>Para: </label>
+			<select id="para">
+				<option value="" selected disabled>Tipo de converção</option>
+				<option value="1">Binário</option>
+				<option value="2">Decimal</option>
+				<option value="3">Octal</option>
+				<option value="4">Hexadecimal</option>
+			</select>
+
+			<label>Digite o número a ser convertido</label>
+			<input type="text" id="numero">
+
+			<label>Resultado da Conversão:</label>
+			<input type="text" id="convertido" disabled placeholder="Conversão">
+
+			<button type="button" onclick="conversaoBases()">Converter</button>
+
+			<button type="reset">Resetar formulário</button>
+
+		</form>
+
+	</article>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	var converterDe = document.getElementById("de");
+	var converterPara = document.getElementById("para");
+	var numInserido = document.getElementById("numero");
+	var resultado = document.getElementById("convertido");
+	
+
+	function conversaoBases(){
+
+		switch(converterDe.value){
+			case '1':
+			//BINÁRIO
+
+				switch(converterPara.value){
+					case '2':
+					//DECIMAL
+					resultado.value = binarioToDecimal(numInserido.value);
+					break;
+					case '3':
+					//OCTAL
+					resultado.value = binarioToOctal(numInserido.value);
+					break;
+					case '4':
+					//HEXADECIMAL
+					resultado.value = binarioToHexa(numInserido.value);
+					break;
+				}
+			break;
+			case '2':
+				//DECIMAL
+			break;
+			case '3':
+				//OCTAL
+			break;
+			case '4':
+				//HEXADECIMAL
+				switch(converterPara.value){
+					case '1':
+					//BINÁRIO
+					resultado.value = hexaToBinario(numInserido.value);
+					break;
+					case '2':
+					//DECIMAL
+					resultado.value = hexaToDecimal(numInserido.value);
+					break;
+					case '3':
+					//OCTAL
+					resultado.value = hexaToOctal(numInserido.value);
+					break;
+				}
+			break;
+		}
+
+	}
+
+//---------------------------------------------------------------
+
+	//FUNÇÃO QUE TRANFORMA NÚMERO DE BINÁRIO PARA DECIMAL
+	function binarioToDecimal(num){
+		//variavel onde será armazenado o resultado
+		var numResu = 0;
+		//valor para saber em que posição do número está
+		//esse valor será aumentando por 1 a cada loop 
+		var x = 0;
+		//valor da largura do numero -1 para começar do primero numero da direita
+		//esse valor será diminuido por 1 a cada loop
+		var lengthNum = num.length-1;
+
+
+		for (var i = 0; i < num.length; i++) {
+			//se o numero atual for 1
+			//entrar e potenciar 2 pela posição da caracter
+			//e armazenar na variavel numResu
+			if(num.charAt(lengthNum) === '1'){
+				numResu = numResu + (2 ** x);
+			}
+			x++;
+			lengthNum--;
+		}
+		return numResu;
+	}
+
+
+
+
+//--------------------------------------------------------------
+	//FUNÇÃO QUE TRANSFORMA DE BINÁRIO PARA OCTAL
+	function  binarioToOctal(num){
+		//comeco e fim para usar na função substring 
+		var comeco = 0;
+		var fim = 3;
+		//array para guardar cada conjunto de 3 bits
+		var arrayResu = Array();
+
+		for (var i = 0; i < num.length; i++) {
+			if(num.substring(comeco, fim) == ''){
+				//se não houver mais numeros ele irá sair do looop
+				break;
+			}
+
+			//passa cada conjunto de 3 bits para a função de binario para decimal
+		 	arrayResu[i] = binarioToDecimal(num.substring(comeco, fim));
+
+		 	//fim e comeco somados com 3 para ir pegando cada tres bits do numero
+			fim = fim + 3;
+			comeco = comeco +3;
+
+		}
+		//loop para colocar os numeros numa variavel para exibi-los sem as virgulas da array
+		var resu = '';
+		for(var i = 0; i < arrayResu.length; i++){
+			resu = resu + '' + arrayResu[i];
+		}
+
+		return resu;
+	}
+
+
+//---------------------------------------------------------
+	// FUNÇÃO PRA CONVERTER DE BINÁRIO PARA HEXADECIMAL
+	function binarioToHexa(num){
+		//comeco e fim para usar na função substring 
+		var comeco = 0;
+		var fim = 4;
+		//array para guardar cada conjunto de 4 bits
+		var arrayResu = Array();
+
+		for (var i = 0; i < num.length; i++) {
+			if(num.substring(comeco, fim) == ''){
+				//se não houver mais numeros ele irá sair do looop
+				break;
+			}
+
+			//passa cada conjunto de 3 bits para a função de binario para decimal
+		 	arrayResu[i] = binarioToDecimal(num.substring(comeco, fim));
+
+		 	//fim e comeco somados com 3 para ir pegando cada tres bits do numero
+			fim = fim + 4;
+			comeco = comeco +4;
+
+		}
+		//loop para colocar os numeros numa variavel para exibi-los 
+		//sem as virgulas da array
+		//e modificar os números de 10 a 15 para A a F
+		var resu = '';
+		for(var i = 0; i < arrayResu.length; i++){
+			var numNormal = [10, 11, 12, 13, 14, 15];
+			var numChange = ['A', 'B', 'C', 'D', 'E', 'F']; 
+			for(var x = 0; x < numNormal.length; x++){
+				if(arrayResu[i] === numNormal[x]){
+					arrayResu[i] = numChange[x];
+					break;
+				}
+			}	
+			resu = resu + '' + arrayResu[i];	
+		}
+
+		return resu;
+	}
+//----------------------------------------------------------------
+function hexaToBinario(num){
+	//colocar numeros na array
+	var numArray = Array();
+	for(var i = 0; i < num.length; i++){
+		numArray[i] = num.charAt(i);
+	}
+
+	//transformar letras em numeros se houver
+	for(var i = 0; i < numArray.length; i++){
+		var numNormal = [10, 11, 12, 13, 14, 15];
+		var numChange = ['A', 'B', 'C', 'D', 'E', 'F']; 
+
+		for(var x = 0; x < numNormal.length; x++){
+
+			if(numArray[i] === numChange[x]){
+				numArray[i] = numNormal[x];
+				break;
+			}
+			else{
+				numArray[i] = parseInt(numArray[i]);
+			}
+		}	
+	}
+
+	//console.log(numArray);
+	//console.log(toBinario(numArray));
+	
+	//Pega número convertido para binario e coloca em string
+	var nuBi = toBinario(numArray);
+	var numString = '';
+	for (var i = 0; i < nuBi.length; i++) {
+		numString = numString + nuBi[i];
+	}
+
+	return numString;
+
+}
+
+//-----------------------------------------------------
+function toBinario(num){
+	
+	var numBinarioCerto = Array();
+	var mat=0;
+	var zer = 0;
+	var i = 0; 
+
+	while (i < num.length) {
+		var numBinario = [];
+		mat = num[i];
+		//continua a dividir um número até ser 0
+		do{	
+			if(mat % 2 === 1){
+				numBinario[zer] = 1;	
+			}
+			else{
+				numBinario[zer] = 0;
+			}
+			//divide o numero e o arredonda
+			mat = Math.floor(mat / 2);
+			
+			zer++;
+		}while(mat > 0);
+
+		//coloca o numero da ordem certa
+		var certoComprimento = numBinarioCerto.length;
+		var contrario = numBinario.length-1;
+		for(var x = 0; x < numBinario.length; x++){
+			if(!isNaN(numBinario[contrario])){
+			numBinarioCerto[certoComprimento] = numBinario[contrario];
+			contrario--;
+			certoComprimento++;
+			}
+		}
+		//esvazia a array para o próxima numero
+		i++
+	}
+
+	return numBinarioCerto;
+}
+
+</script>

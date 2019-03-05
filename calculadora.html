@@ -100,18 +100,21 @@
 			//BINÁRIO
 
 				switch(converterPara.value){
+					case '1':
+						alert('Não pode converter pro mesmo tipo né');
+						break;
 					case '2':
-					//DECIMAL
-					resultado.value = binarioToDecimal(numInserido.value);
-					break;
+						//DECIMAL
+						resultado.value = binarioToDecimal(numInserido.value);
+						break;
 					case '3':
-					//OCTAL
-					resultado.value = binarioToOctal(numInserido.value);
-					break;
+						//OCTAL
+						resultado.value = binarioToOctal(numInserido.value);
+						break;
 					case '4':
-					//HEXADECIMAL
-					resultado.value = binarioToHexa(numInserido.value);
-					break;
+						//HEXADECIMAL
+						resultado.value = binarioToHexa(numInserido.value);
+						break;
 				}
 			break;
 			case '2':
@@ -144,28 +147,45 @@
 //---------------------------------------------------------------
 
 	//FUNÇÃO QUE TRANFORMA NÚMERO DE BINÁRIO PARA DECIMAL
+	// 		a função pega cada caracter do fim ao começo
+	// 		e verifica se é o numero 1
+	// 		se for verdadeiro ele irá potencializar 2 à posição do caracter 
+	// 		que é contada pela variavel posicaoDoCaracter
+	// 		e o resultado é armazenar na variável numResultado 
+	// 		e somado com o contéudo já presente nesta variável
+	//  
 	function binarioToDecimal(num){
+
+		// remover espaços em branco da string
+		num = num.replace(/ /g,'');
+
 		//variavel onde será armazenado o resultado
-		var numResu = 0;
+		var numResultado = 0;
+
 		//valor para saber em que posição do número está
 		//esse valor será aumentando por 1 a cada loop 
-		var x = 0;
-		//valor da largura do numero -1 para começar do primero numero da direita
+		var posicaoDoCaracter = 0;
+
+		//valor do comprimeto do numero/string -1 para começar do primero numero da direita
 		//esse valor será diminuido por 1 a cada loop
-		var lengthNum = num.length-1;
+		var comprimentoAoContrario = num.length - 1;
 
 
+		//se o numero atual for 1
+		//entrar e potenciar 2 pela posição do caracter
+		//e armazenar na variavel numResultado
+		//e somar com o contéudo desta variável
 		for (var i = 0; i < num.length; i++) {
-			//se o numero atual for 1
-			//entrar e potenciar 2 pela posição da caracter
-			//e armazenar na variavel numResu
-			if(num.charAt(lengthNum) === '1'){
-				numResu = numResu + (2 ** x);
+
+			if(num.charAt(comprimentoAoContrario) === '1'){
+				numResultado = numResultado + (2 ** posicaoDoCaracter);
 			}
-			x++;
-			lengthNum--;
+
+			posicaoDoCaracter++;
+			comprimentoAoContrario--;
 		}
-		return numResu;
+
+		return numResultado;
 	}
 
 
@@ -173,12 +193,22 @@
 
 //--------------------------------------------------------------
 	//FUNÇÃO QUE TRANSFORMA DE BINÁRIO PARA OCTAL
+	//		separar conjuntos de 3 bits, do fim da da string para o começo 
+	//		(da direita para  esquerada)
+	//		colocar os numeros numa string para exibilos sem virgula
+	// 		e colocar os números na ordem correta
+
 	function  binarioToOctal(num){
-		//comeco e fim para usar na função substring 
-		var comeco = 0;
-		var fim = 3;
+
+		// remover todos os espaços em branco da string
+		num = num.replace(/ /g,'');
+
+		// comeco e fim para usar na função substring
+		var comeco = num.length;
+		var fim = num.length - 3;
+
 		//array para guardar cada conjunto de 3 bits
-		var arrayResu = Array();
+		var arrayResultado = Array();
 
 		for (var i = 0; i < num.length; i++) {
 			if(num.substring(comeco, fim) == ''){
@@ -187,64 +217,91 @@
 			}
 
 			//passa cada conjunto de 3 bits para a função de binario para decimal
-		 	arrayResu[i] = binarioToDecimal(num.substring(comeco, fim));
+		 	arrayResultado[i] = binarioToDecimal(num.substring(comeco, fim));
 
 		 	//fim e comeco somados com 3 para ir pegando cada tres bits do numero
-			fim = fim + 3;
-			comeco = comeco +3;
+			fim = fim - 3;
+			comeco = comeco - 3;
 
 		}
+
 		//loop para colocar os numeros numa variavel para exibi-los sem as virgulas da array
-		var resu = '';
-		for(var i = 0; i < arrayResu.length; i++){
-			resu = resu + '' + arrayResu[i];
-		}
+		var resultadoContrario = arrayResultado.toString().replace(/,/g, '');
+		var resultado = '';
 
-		return resu;
+		for(var i = resultadoContrario.length-1; i >= 0; i--){
+			resultado = resultado + '' + resultadoContrario[i];
+		}		
+
+		return resultado;
 	}
 
 
 //---------------------------------------------------------
 	// FUNÇÃO PRA CONVERTER DE BINÁRIO PARA HEXADECIMAL
+	//		separar conjuntos de 4 bits, do fim da da string para o começo 
+	//		(da direita para esquerada)
+	// 		e passa-los pela funcao que converte de binario para hexadecimal
+	//		e depois converter numeros de 10 a 15 para letra
+	// 		e colocar os números na ordem correta
 	function binarioToHexa(num){
-		//comeco e fim para usar na função substring 
-		var comeco = 0;
-		var fim = 4;
-		//array para guardar cada conjunto de 4 bits
-		var arrayResu = Array();
+
+		// remover espaços em branco da string
+		num = num.replace(/ /g,'');
+
+		// comeco e fim para usar na função substring
+		var comeco = num.length;
+		var fim = num.length - 4;
+
+		// array para guardar cada conjunto de 4 bits
+		var arrayResultado = Array();
 
 		for (var i = 0; i < num.length; i++) {
 			if(num.substring(comeco, fim) == ''){
-				//se não houver mais numeros ele irá sair do looop
+				// se não houver mais numeros ele irá sair do looop
 				break;
 			}
 
-			//passa cada conjunto de 3 bits para a função de binario para decimal
-		 	arrayResu[i] = binarioToDecimal(num.substring(comeco, fim));
+			// passa cada conjunto de 4 bits 
+			// para a função de binario para decimal
+		 	arrayResultado[i] = binarioToDecimal(num.substring(comeco, fim));
 
-		 	//fim e comeco somados com 3 para ir pegando cada tres bits do numero
-			fim = fim + 4;
-			comeco = comeco +4;
-
+		 	// fim e comeco subtraidos com 4
+		 	// para pegar o próximo conjunto de 4 bits
+			fim = fim - 4;
+			comeco = comeco - 4;
 		}
-		//loop para colocar os numeros numa variavel para exibi-los 
-		//sem as virgulas da array
-		//e modificar os números de 10 a 15 para A a F
-		var resu = '';
-		for(var i = 0; i < arrayResu.length; i++){
+
+		// loop para colocar os numeros 
+		// numa variavel para exibi-los sem as virgulas da array
+		// e modificar os números de 10 a 15 para A a F
+		var resultado = '';
+		var numeroEmOrdem = [];
+		var indexContrario = arrayResultado.length-1;
+
+		for(var i = 0; i < arrayResultado.length; i++){
 			var numNormal = [10, 11, 12, 13, 14, 15];
-			var numChange = ['A', 'B', 'C', 'D', 'E', 'F']; 
+			var numLetra = ['A', 'B', 'C', 'D', 'E', 'F'];
+
 			for(var x = 0; x < numNormal.length; x++){
-				if(arrayResu[i] === numNormal[x]){
-					arrayResu[i] = numChange[x];
+				if(arrayResultado[i] === numNormal[x]){
+					// se for igual mudar para o mesmo index na array com letras
+					arrayResultado[i] = numLetra[x];
 					break;
 				}
 			}	
-			resu = resu + '' + arrayResu[i];	
+				numeroEmOrdem[indexContrario] = arrayResultado[i];
+				indexContrario--;
 		}
 
-		return resu;
+		resultado = numeroEmOrdem.toString().replace(/,/g,'');
+
+		return resultado;
 	}
+
+
+
+
 //----------------------------------------------------------------
 function hexaToBinario(num){
 	//colocar numeros na array

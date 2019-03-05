@@ -300,87 +300,138 @@
 	}
 
 
-
-
 //----------------------------------------------------------------
-function hexaToBinario(num){
-	//colocar numeros na array
-	var numArray = Array();
-	for(var i = 0; i < num.length; i++){
-		numArray[i] = num.charAt(i);
-	}
 
-	//transformar letras em numeros se houver
-	for(var i = 0; i < numArray.length; i++){
-		var numNormal = [10, 11, 12, 13, 14, 15];
-		var numChange = ['A', 'B', 'C', 'D', 'E', 'F']; 
+	// FUNÇÃO QUE CONVERTER DE HEXADECIMAL PARA BINÁRIO
+	// 		primeira a função colocar os números separados na array listaDeNumeros
+	//		depois tranformam o padrão alfabético em numérico, converte todos os numeros para int
+	//		e passa esses números para a função toBinario 
+	//		e depois converte esse numero para string e retira as virgulas
 
-		for(var x = 0; x < numNormal.length; x++){
+	function hexaToBinario(num){
 
-			if(numArray[i] === numChange[x]){
-				numArray[i] = numNormal[x];
-				break;
+		// remover espaços em branco da string
+		num = num.replace(/ /g,'');
+
+		// deixa todos os números em capitular
+		num = num.toUpperCase();
+		
+		//colocar numeros na array
+		var listaDeNumeros = Array();
+		for(var i = 0; i < num.length; i++){
+			listaDeNumeros[i] = num.charAt(i);
+		}
+
+
+		//transformar letras em numeros se houver
+		for(var i = 0; i < listaDeNumeros.length; i++){
+			var numNormal = [10, 11, 12, 13, 14, 15];
+			var numLetra = ['A', 'B', 'C', 'D', 'E', 'F']; 
+
+			for(var x = 0; x < numNormal.length; x++){
+				if(listaDeNumeros[i] === numLetra[x]){
+					listaDeNumeros[i] = numNormal[x];
+					break;
+				}
+			}	
+				if(!isNaN(listaDeNumeros[i])){
+					listaDeNumeros[i] = parseInt(listaDeNumeros[i]);
+				}
+		}
+
+		//passa cada numero individualmente pela funcao decimal para binário
+		//e depois verifica se precisa de zeros para completar o conjunto de 4 bits
+		var numerosBinarios = Array();
+		for (var i = 0; i < listaDeNumeros.length; i++) {
+			numerosBinarios[i] = decimalToBinario(listaDeNumeros[i]);
+			console.log(numerosBinarios[i]);
+			
+			if(numerosBinarios[i].length < 4){
+				var zerosQfaltam = 4 - numerosBinarios[i].length;
+				console.log(numerosBinarios[i].length);
+
+				
+				var index = 0;
+				var zeros = '';
+				while(index < zerosQfaltam){
+					console.log(index);
+					zeros = zeros + '0';
+					index++;
+				}
+
+				numerosBinarios[i] = zeros + numerosBinarios[i];
 			}
-			else{
-				numArray[i] = parseInt(numArray[i]);
-			}
-		}	
+
+		}
+		
+		
+		//Pega números convertidos para binario e coloca em string
+		var numeroCompleto = numerosBinarios.toString().replace(/,/g,'');
+
+		return numeroCompleto;
+
 	}
-
-	//console.log(numArray);
-	//console.log(toBinario(numArray));
-	
-	//Pega número convertido para binario e coloca em string
-	var nuBi = toBinario(numArray);
-	var numString = '';
-	for (var i = 0; i < nuBi.length; i++) {
-		numString = numString + nuBi[i];
-	}
-
-	return numString;
-
-}
 
 //-----------------------------------------------------
-function toBinario(num){
-	
-	var numBinarioCerto = Array();
-	var mat=0;
-	var zer = 0;
-	var i = 0; 
 
-	while (i < num.length) {
-		var numBinario = [];
-		mat = num[i];
-		//continua a dividir um número até ser 0
-		do{	
-			if(mat % 2 === 1){
-				numBinario[zer] = 1;	
-			}
-			else{
-				numBinario[zer] = 0;
-			}
-			//divide o numero e o arredonda
-			mat = Math.floor(mat / 2);
+	// FUNÇÃO QUE TRANSFORMA DECIMAL PARA BINÁRIO
+	//		a funcao pega o numero e entra em um loop
+	//		onde o numeros será divido e se o resto for igual a 1 guarda 1 e ao contrario guarda 0
+	//		depois o número é colocado na ordem correta e retornado como string
+	//		
+	function decimalToBinario(num){
+		
+		var numBinarioOrdenado = Array();
+		var numeroDividido = 0;
+		var indexInterno = 0;
+		
+		var i = 0; 
+		do {
+			//declarado aqui para ficar vazio depois
+			var numBinario = [];
+
+			numeroDividido = num;
+
+			//é um loop do porque se for só um número ele entra direto no loop sem problema
+			do{	
+				//continua a dividir um número até ser 0
+				if(numeroDividido % 2 === 1){
+					numBinario[indexInterno] = 1;	
+				}
+				else{
+					numBinario[indexInterno] = 0;
+				}
+
+				//divide o numero e o arredonda
+				numeroDividido = Math.floor(numeroDividido / 2);
+
+				//vai para proximo local na array
+				indexInterno++;
+
+			} while(numeroDividido > 0);
+
 			
-			zer++;
-		}while(mat > 0);
+			//coloca o numero da ordem certa
+			var indexNormal = numBinarioOrdenado.length;
+			var indexContrario = numBinario.length - 1;
 
-		//coloca o numero da ordem certa
-		var certoComprimento = numBinarioCerto.length;
-		var contrario = numBinario.length-1;
-		for(var x = 0; x < numBinario.length; x++){
-			if(!isNaN(numBinario[contrario])){
-			numBinarioCerto[certoComprimento] = numBinario[contrario];
-			contrario--;
-			certoComprimento++;
+			for(var x = 0; x < numBinario.length; x++){
+				// se for numero coloca na outra array
+				// na orderm correta
+				if(!isNaN(numBinario[indexContrario])){
+					numBinarioOrdenado[indexNormal] = numBinario[indexContrario];
+
+					indexContrario--;
+					indexNormal++;
+				}
 			}
-		}
-		//esvazia a array para o próxima numero
-		i++
-	}
 
-	return numBinarioCerto;
-}
+			//aumenta o index do primero loop do
+			i++;
+
+		}while (i < num.length)
+
+		return numBinarioOrdenado.toString().replace(/,/g, '');
+	}
 
 </script>

@@ -119,9 +119,37 @@
 			break;
 			case '2':
 				//DECIMAL
+				switch(converterPara.value){
+					case '1':
+						//BINÁRIO
+						resultado.value = decimalToBinario(numInserido.value);
+						break;
+					case '3':
+						//OCTAL
+						resultado.value = decimalToOctal(numInserido.value);
+						break;
+					case '4':
+						//HEXADECIMAL
+						resultado.value = decimalToHexa(numInserido.value);
+						break;
+				}
 			break;
 			case '3':
 				//OCTAL
+				switch(converterPara.value){
+					case '1':
+						//BINÁRIO
+						resultado.value = octalToBinario(numInserido.value);
+						break;
+					case '2':
+						//DECIMAL
+						resultado.value = octalToDecimal(numInserido.value);
+						break;
+					case '4':
+						//HEXADECIMAL
+						resultado.value = octalToHexa(numInserido.value);
+						break;
+				}
 			break;
 			case '4':
 				//HEXADECIMAL
@@ -189,6 +217,39 @@
 	}
 
 
+	//-----------------------
+		// FUNÇÃO QUE SEPARA O NÚMERO BINARIO PARA CONJUNTO DE N BITS
+		//		separa os conjuntos de N bits
+		//		e passa esse conjuntos para a funcao binarioToOctal e binario para Hexadecimal
+		function conjuntosBinario(numero, numeroDeBits){
+			// remover todos os espaços em branco da string
+			numero = numero.replace(/ /g,'');
+
+			// comeco e fim para usar na função substring
+			var comeco = numero.length;
+			var fim = numero.length - numeroDeBits;
+
+			//array para guardar cada conjunto de N bits
+			var arrayResultado = Array();
+
+			for (var i = 0; i < numero.length; i++) {
+				if(numero.substring(comeco, fim) == ''){
+					//se não houver mais numeros ele irá sair do looop
+					break;
+				}
+
+				//passa cada conjunto de N bits 
+				// para a função de binario para decimal
+			 	arrayResultado[i] = binarioToDecimal(numero.substring(comeco, fim));
+
+			 	//fim e comeco somados com N 
+			 	// para ir pegando cada N bits do numero
+				fim = fim - numeroDeBits;
+				comeco = comeco - numeroDeBits;
+			}
+
+			return arrayResultado;
+		}
 
 
 //--------------------------------------------------------------
@@ -200,30 +261,8 @@
 
 	function  binarioToOctal(num){
 
-		// remover todos os espaços em branco da string
-		num = num.replace(/ /g,'');
-
-		// comeco e fim para usar na função substring
-		var comeco = num.length;
-		var fim = num.length - 3;
-
-		//array para guardar cada conjunto de 3 bits
-		var arrayResultado = Array();
-
-		for (var i = 0; i < num.length; i++) {
-			if(num.substring(comeco, fim) == ''){
-				//se não houver mais numeros ele irá sair do looop
-				break;
-			}
-
-			//passa cada conjunto de 3 bits para a função de binario para decimal
-		 	arrayResultado[i] = binarioToDecimal(num.substring(comeco, fim));
-
-		 	//fim e comeco somados com 3 para ir pegando cada tres bits do numero
-			fim = fim - 3;
-			comeco = comeco - 3;
-
-		}
+		// array que guarda conjuntos de 3 bits
+		var arrayResultado = conjuntosBinario(num, 3);
 
 		//loop para colocar os numeros numa variavel para exibi-los sem as virgulas da array
 		var resultadoContrario = arrayResultado.toString().replace(/,/g, '');
@@ -246,31 +285,9 @@
 	// 		e colocar os números na ordem correta
 	function binarioToHexa(num){
 
-		// remover espaços em branco da string
-		num = num.replace(/ /g,'');
-
-		// comeco e fim para usar na função substring
-		var comeco = num.length;
-		var fim = num.length - 4;
-
 		// array para guardar cada conjunto de 4 bits
-		var arrayResultado = Array();
+		var arrayResultado = conjuntosBinario(num, 4);
 
-		for (var i = 0; i < num.length; i++) {
-			if(num.substring(comeco, fim) == ''){
-				// se não houver mais numeros ele irá sair do looop
-				break;
-			}
-
-			// passa cada conjunto de 4 bits 
-			// para a função de binario para decimal
-		 	arrayResultado[i] = binarioToDecimal(num.substring(comeco, fim));
-
-		 	// fim e comeco subtraidos com 4
-		 	// para pegar o próximo conjunto de 4 bits
-			fim = fim - 4;
-			comeco = comeco - 4;
-		}
 
 		// loop para colocar os numeros 
 		// numa variavel para exibi-los sem as virgulas da array
@@ -305,7 +322,7 @@
 	// FUNÇÃO QUE CONVERTER DE HEXADECIMAL PARA BINÁRIO
 	// 		primeira a função colocar os números separados na array listaDeNumeros
 	//		depois tranformam o padrão alfabético em numérico, converte todos os numeros para int
-	//		e passa esses números para a função toBinario 
+	//		e passa esses números para a função decimalToBinario 
 	//		e depois converte esse numero para string e retira as virgulas
 
 	function hexaToBinario(num){
@@ -339,36 +356,7 @@
 				}
 		}
 
-		//passa cada numero individualmente pela funcao decimal para binário
-		//e depois verifica se precisa de zeros para completar o conjunto de 4 bits
-		var numerosBinarios = Array();
-		for (var i = 0; i < listaDeNumeros.length; i++) {
-			numerosBinarios[i] = decimalToBinario(listaDeNumeros[i]);
-			console.log(numerosBinarios[i]);
-			
-			if(numerosBinarios[i].length < 4){
-				var zerosQfaltam = 4 - numerosBinarios[i].length;
-				console.log(numerosBinarios[i].length);
-
-				
-				var index = 0;
-				var zeros = '';
-				while(index < zerosQfaltam){
-					console.log(index);
-					zeros = zeros + '0';
-					index++;
-				}
-
-				numerosBinarios[i] = zeros + numerosBinarios[i];
-			}
-
-		}
-		
-		
-		//Pega números convertidos para binario e coloca em string
-		var numeroCompleto = numerosBinarios.toString().replace(/,/g,'');
-
-		return numeroCompleto;
+		return listaPraBinario(listaDeNumeros, 4);
 
 	}
 
@@ -385,8 +373,8 @@
 		var numeroDividido = 0;
 		var indexInterno = 0;
 		
-		var i = 0; 
-		do {
+		//var i = 0; 
+		//do {
 			//declarado aqui para ficar vazio depois
 			var numBinario = [];
 
@@ -409,7 +397,7 @@
 				indexInterno++;
 
 			} while(numeroDividido > 0);
-
+			
 			
 			//coloca o numero da ordem certa
 			var indexNormal = numBinarioOrdenado.length;
@@ -426,12 +414,128 @@
 				}
 			}
 
-			//aumenta o index do primero loop do
-			i++;
+			//i++;	
+		//}while (i < num.length)
 
-		}while (i < num.length)
-
+		
 		return numBinarioOrdenado.toString().replace(/,/g, '');
 	}
 
+//------------------------------------------------------------
+	// FUNÇÃO DE HEXADECIMAL PARA DECIMAL
+	//	usa a funcao hexaToBinario para pegar o numero binario
+	// e depois usa outra funcao binarioToDecimal	
+	function hexaToDecimal(num){
+		var numeroBinario = hexaToBinario(num);
+		var numeroDecimal = binarioToDecimal(numeroBinario);
+
+		return numeroDecimal;
+	}
+
+
+//------------------------------------------------------------
+		// FUNÇÃO DE HEXADECIMAL PARA OCTAL
+		//		usa a funcao hexaToBinario para pegar o numero binario
+		// 		e depois usa outra funcao binarioToDecimal	
+		function hexaToOctal(num){
+			var numeroBinario = hexaToBinario(num);
+			return binarioToOctal(numeroBinario);
+		}
+
+//------------------------------------------------------------
+		// FUNÇÃO DE OCTAL PARA BINÁRIO
+		//		coloca numeros em uma lista/array e passa para a funcao listaPra binário
+		// 
+		function octalToBinario(num){
+
+			// remover espaços em branco da string
+			num = num.replace(/ /g,'');
+			
+			//colocar numeros na array e converte-los em int
+			var listaDeNumeros = Array();
+			for(var i = 0; i < num.length; i++){
+				listaDeNumeros[i] = parseInt(num.charAt(i));
+			}
+
+			//Pega números convertidos para binario e coloca em string
+			return listaPraBinario(listaDeNumeros, 3);
+
+		}
+
+//------------------------------------------------------------
+		// FUNÇÃO DE OCTAL PARA DECIMAL
+		//			
+		function octalToDecimal(num){
+
+			var numBinario = octalToBinario(num);
+
+			return binarioToDecimal(numBinario);
+
+		}
+
+//------------------------------------------------------------
+		// FUNÇÃO DE OCTAL PARA HEXADECIMAL
+		//			
+		function octalToHexa(num){
+
+			var numBinario = octalToBinario(num);
+
+			return binarioToHexa(numBinario);
+
+		}
+
+//------------------------------------------------------------
+		// FUNÇÃO DE DECIMAL PARA OCTAL
+		//			
+		function decimalToOctal(num){
+
+			var numBinario = decimalToBinario(num);
+
+			return binarioToOctal(numBinario);
+
+		}
+
+//------------------------------------------------------------
+		// FUNÇÃO DE DECIMAL PARA HEXADECIMAL
+		//			
+		function decimalToHexa(num){
+
+			var numBinario = decimalToBinario(num);
+
+			return binarioToHexa(numBinario);
+
+		}
+
+
+
+
+//-------------------------------------------------------
+		// FUNÇÃO QUE PASSA UMA LISTA DE NUMEROS UM POR UM
+		// DEPOIS VERIFICA SE CADA NÚMERO QUE RETORNA TEM A QUANTIDADE CORRETA DE BITS
+		// SE NÃO ADICIONA OS ZEROS NECESSÁRIOS ANTES
+		//		função usada nas funções de hexadecimal e octal para binário
+		function listaPraBinario(lista, qtdBits){
+			//passa cada numero individualmente pela funcao decimal para binário
+			//e depois verifica se precisa de zeros para completar o conjunto de N bits
+			var numerosBinarios = Array();
+			for (var i = 0; i < lista.length; i++) {
+				numerosBinarios[i] = decimalToBinario(lista[i]);
+				
+				if(numerosBinarios[i].length < qtdBits){
+					var zerosQfaltam = qtdBits - numerosBinarios[i].length;			
+					var index = 0;
+					var zeros = '';
+
+					while(index < zerosQfaltam){
+						zeros = zeros + '0';
+						index++;
+					}
+
+					numerosBinarios[i] = zeros + numerosBinarios[i];
+				}	
+			}
+			
+			return numerosBinarios.toString().replace(/,/g,'');
+		}
+		
 </script>

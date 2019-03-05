@@ -50,19 +50,8 @@
 			
 
 			<label>Selecione o tipo de conversão: </label>
-
-			<label>De: </label>
 			<select id="de">
 				<option value="" selected disabled>Tipo de número</option>
-				<option value="1">Binário</option>
-				<option value="2">Decimal</option>
-				<option value="3">Octal</option>
-				<option value="4">Hexadecimal</option>
-			</select>
-
-			<label>Para: </label>
-			<select id="para">
-				<option value="" selected disabled>Tipo de converção</option>
 				<option value="1">Binário</option>
 				<option value="2">Decimal</option>
 				<option value="3">Octal</option>
@@ -73,7 +62,18 @@
 			<input type="text" id="numero">
 
 			<label>Resultado da Conversão:</label>
-			<input type="text" id="convertido" disabled placeholder="Conversão">
+
+			<label>Binário</label>
+			<input type="text" id="binario" disabled placeholder="Conversão">
+
+			<label>Decimal</label>
+			<input type="text" id="decimal" disabled placeholder="Conversão">
+
+			<label>Octal</label>
+			<input type="text" id="octal" disabled placeholder="Conversão">
+
+			<label>Hexadecimal</label>
+			<input type="text" id="hexa" disabled placeholder="Conversão">
 
 			<button type="button" onclick="conversaoBases()">Converter</button>
 
@@ -87,10 +87,14 @@
 </html>
 
 <script type="text/javascript">
+
+	//DECLARAR VARIÁVES 
 	var converterDe = document.getElementById("de");
-	var converterPara = document.getElementById("para");
 	var numInserido = document.getElementById("numero");
-	var resultado = document.getElementById("convertido");
+	var resultadoBinario = document.getElementById("binario");
+	var resultadoDecimal = document.getElementById("decimal");
+	var resultadoOctal = document.getElementById("octal");
+	var resultadoHexa = document.getElementById("hexa");
 	
 
 	function conversaoBases(){
@@ -98,79 +102,89 @@
 		switch(converterDe.value){
 			case '1':
 			//BINÁRIO
+				
+				//checa se o valor inserido contem numeros só numeros 0 ou 1 se falso avisa
+				//regular expression (regex) = /^[0-1]+$/
+				// simbolo ^ (fora das chaves)= pesquisa caracter no comeco do string ; 
+				//	       $ = pesquisa no final do string; 
+				//		   + = pelo menos um; 
+				//	      // = pesquisa por um padrão
+				//       [] = pesquisa qualquer caracter dentro das chaves
+				if( /^[0-1]+$/.test(numInserido.value) === false){
+					alert("Números binários só contém os caracteres 0 e 1.")
+				}
+				else{
+					//BINÁRIO
+					resultadoBinario.value = numInserido.value;
 
-				switch(converterPara.value){
-					case '1':
-						alert('Não pode converter pro mesmo tipo né');
-						break;
-					case '2':
-						//DECIMAL
-						resultado.value = binarioToDecimal(numInserido.value);
-						break;
-					case '3':
-						//OCTAL
-						resultado.value = binarioToOctal(numInserido.value);
-						break;
-					case '4':
-						//HEXADECIMAL
-						resultado.value = binarioToHexa(numInserido.value);
-						break;
+					//DECIMAL
+					resultadoDecimal.value = binarioToDecimal(numInserido.value);
+
+					//OCTAL
+					resultadoOctal.value = binarioToOctal(numInserido.value);
+
+					//HEXADECIMAL
+					resultadoHexa.value = binarioToHexa(numInserido.value);
 				}
 			break;
 			case '2':
 				//DECIMAL
-				switch(converterPara.value){
-					case '1':
-						//BINÁRIO
-						resultado.value = decimalToBinario(numInserido.value);
-						break;
-					case '3':
-						//OCTAL
-						resultado.value = decimalToOctal(numInserido.value);
-						break;
-					case '4':
-						//HEXADECIMAL
-						resultado.value = decimalToHexa(numInserido.value);
-						break;
+				if( /[a-zA-Z]/g.test(numInserido.value) === true){
+					alert("Números decimais só contém números.")
+				}
+				else{
+					//BINÁRIO
+					resultadoBinario.value = decimalToBinario(numInserido.value);
+
+					//DECIMAL
+					resultadoDecimal.value = numInserido.value;
+
+					//OCTAL
+					resultadoOctal.value = decimalToOctal(numInserido.value);
+
+					//HEXADECIMAL
+					resultadoHexa.value = decimalToHexa(numInserido.value);
 				}
 			break;
 			case '3':
 				//OCTAL
-				switch(converterPara.value){
-					case '1':
-						//BINÁRIO
-						resultado.value = octalToBinario(numInserido.value);
-						break;
-					case '2':
-						//DECIMAL
-						resultado.value = octalToDecimal(numInserido.value);
-						break;
-					case '4':
-						//HEXADECIMAL
-						resultado.value = octalToHexa(numInserido.value);
-						break;
+				if( /^[0-7]+$/g.test(numInserido.value) === false){
+					alert("Números octais só vão de 0 a 7.")
+				}
+				else{
+					//BINÁRIO
+					resultadoBinario.value = octalToBinario(numInserido.value);
+
+					//DECIMAL
+					resultadoDecimal.value = octalToDecimal(numInserido.value);
+
+					//OCTAL
+					resultadoOctal.value = numInserido.value;
+
+					//HEXADECIMAL
+					resultadoHexa.value = octalToHexa(numInserido.value);
 				}
 			break;
 			case '4':
+			if( /^[10-15]+$/g.test(numInserido.value) === true){
+				alert("Números hexadecimais só vão de 0 a 9 e de A a F.")
+			} else{
 				//HEXADECIMAL
-				switch(converterPara.value){
-					case '1':
 					//BINÁRIO
-					resultado.value = hexaToBinario(numInserido.value);
-					break;
-					case '2':
-					//DECIMAL
-					resultado.value = hexaToDecimal(numInserido.value);
-					break;
-					case '3':
-					//OCTAL
-					resultado.value = hexaToOctal(numInserido.value);
-					break;
-				}
-			break;
-		}
+					resultadoBinario.value = hexaToBinario(numInserido.value);
 
+					//DECIMAL
+					resultadoDecimal.value = hexaToDecimal(numInserido.value);
+
+					//OCTAL
+					resultadoOctal.value = hexaToOctal(numInserido.value);
+
+					//HEXADECIMAL
+					resultadoHexa.value = numInserido.value;
+			}
+			break;
 	}
+}
 
 //---------------------------------------------------------------
 

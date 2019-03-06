@@ -178,7 +178,7 @@
 			<div class="linha">
 				<button type="button" onclick="conversaoBases()">Converter</button>
 			
-				<button type="reset">Resetar</button>
+				<button type="reset" onclick="limpar()">Resetar</button>
 			</div>
 
 		</form>
@@ -246,9 +246,26 @@
 	var resultadoHexa = document.getElementById("hexa");
 	
 
+	function limpar(){
+		//BINÁRIO
+		resultadoBinario.value = '0';
+
+		//DECIMAL
+		resultadoDecimal.value = '0';
+
+		//OCTAL
+		resultadoOctal.value = '0';
+
+		//HEXADECIMAL
+		resultadoHexa.value = '0';
+	}
+
 	function conversaoBases(){
 
 		switch(converterDe.value){
+			case '':
+				alert("Escolha o tipo de número que foi inserido.");
+				break;
 			case '1':
 			//BINÁRIO
 				

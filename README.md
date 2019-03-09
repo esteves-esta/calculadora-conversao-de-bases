@@ -1,3 +1,3 @@
 ## Calculadora para conversão de bases
 
-Calculadora feita pra praticar javascript, HTML e CSS.
+Projeto pessoal realizado com intuito de treinar e praticar conceitos de HTML, CSS e JavaScript.

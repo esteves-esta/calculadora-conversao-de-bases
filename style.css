@@ -1,0 +1,160 @@
+*{
+	margin:0px;
+	padding: 0px;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /*height: 100vh;*/
+    display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #455368;
+	color: #fff;
+}
+
+h2, h3 {
+	letter-spacing: 1px;
+	margin-bottom: 15px;
+}
+
+p, label {
+	letter-spacing: 1.4px
+}
+
+label{
+	text-transform: uppercase;
+	color:#f57f72;
+}
+
+a {
+	color:#fff;
+	text-decoration: none;
+	transition: all ease-in-out .5s;
+}
+
+footer:hover, 
+footer:hover a, 
+footer:hover #git-logo {
+	fill:#f57f72;
+	color:#2A354F;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+span {
+	color: #f57f72;
+}
+
+input, 
+select, 
+button {
+	font-size:0.8em;
+	letter-spacing: 1.0px;
+	width: 250px;
+	height: 48px;	
+	padding-right: 16px;
+	padding-left: 16px;
+	outline:none;
+	border: 0;
+	border-radius: 2px;
+	margin: 10px;
+}
+
+
+button {
+	font-size:1.1em;
+	font-weight: 600;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background-color: #ededed;
+	border:none;
+	cursor: pointer;
+	transition:all 0.35s ease-out;
+}
+
+button:hover {
+	color:#fff;
+	background-color: #263448;
+
+}
+
+input[disabled] {
+	font-size:1.6em;
+	letter-spacing: 2.9px;
+	display: block;
+	background-color: #263448;
+	color:#fff;
+	font-weight: bold;
+	text-transform: uppercase;
+	border:none;
+	margin-left: 0px;
+}
+
+article{
+	width: 40%;	
+	margin-top: 35px;	
+}
+
+.linha{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin: 30px 0px;
+}
+
+footer{
+	word-spacing: 2px;
+	font-size: 0.8em;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	transition: all ease-in-out .5s;
+}
+
+footer div{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+#git-logo{
+	width: 25px;
+	transition: all ease-in-out .5s;
+}
+
+.git-rep{
+	align-self: flex-end;
+	margin-left: 25px;
+}
+
+@media only screen and (max-width: 700px) {
+	input[disabled]{
+		font-size: 1em;
+	}
+
+	input,
+	select,
+	button
+	{
+		width: 90%;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	h2,
+	h3 {
+		font-size:1em;
+	}
+}
